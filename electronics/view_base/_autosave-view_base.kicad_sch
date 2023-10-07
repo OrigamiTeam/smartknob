@@ -9144,7 +9144,7 @@
     (property "Value" "TS1117BCW33_RPG" (at 101.6 44.45 0)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Footprint" "Modified:SOT-223-3_TabPin2_GndOutIn" (at 91.44 26.67 0)
+    (property "Footprint" "cleaned footprints:SOT-223-3_TabPin2_GndOutIn" (at 91.44 26.67 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "https://www.mouser.com/datasheet/2/395/TS1117B_H1607-1918589.pdf" (at 90.17 24.13 0)
