@@ -7,7 +7,7 @@
 
 static const uint8_t LEDC_CHANNEL_LCD_BACKLIGHT = 0;
 
-DisplayTask::DisplayTask(const uint8_t task_core) : Task{"Display", 2048, 1, task_core} {
+DisplayTask::DisplayTask(const uint8_t task_core) : Task{"Display", 2048 * 2, 1, task_core} {
   knob_state_queue_ = xQueueCreate(1, sizeof(PB_SmartKnobState));
   assert(knob_state_queue_ != NULL);
 
@@ -30,14 +30,15 @@ static void drawPlayButton(TFT_eSprite& spr, int x, int y, int width, int height
 }
 
 void DisplayTask::run() {
+  
     tft_.begin();
     tft_.invertDisplay(1);
     tft_.setRotation(SK_DISPLAY_ROTATION);
     tft_.fillScreen(TFT_DARKGREEN);
 
-    ledcSetup(LEDC_CHANNEL_LCD_BACKLIGHT, 5000, 16);
+    ledcSetup(LEDC_CHANNEL_LCD_BACKLIGHT, 5000, 8);
     ledcAttachPin(PIN_LCD_BACKLIGHT, LEDC_CHANNEL_LCD_BACKLIGHT);
-    ledcWrite(LEDC_CHANNEL_LCD_BACKLIGHT, UINT16_MAX);
+    ledcWrite(LEDC_CHANNEL_LCD_BACKLIGHT, UINT8_MAX);
 
     spr_.setColorDepth(8);
 

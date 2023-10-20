@@ -23,12 +23,13 @@ bool Configuration::loadFromDisk() {
     SemaphoreGuard lock(mutex_);
     FatGuard fatGuard(logger_);
     if (!fatGuard.mounted_) {
+        log_d("Failed to mount FFAT");
         return false;
     }
 
     File f = FFat.open(CONFIG_PATH);
     if (!f) {
-        log("Failed to read config file");
+        log_d("Failed to read config file");
         return false;
     }
 

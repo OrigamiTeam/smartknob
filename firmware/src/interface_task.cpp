@@ -42,102 +42,102 @@ static PB_SmartKnobConfig configs[] = {
     // float snap_point_bias;
     // int8_t led_hue;
 
-    {
-        0,
-        0,
-        0,
-        0,
-        -1, // max position < min position indicates no bounds
-        10 * PI / 180,
-        0,
-        1,
-        1.1,
-        "Unbounded\nNo detents",
-        0,
-        {},
-        0,
-        200,
-    },
-    {
-        0,
-        0,
-        1,
-        0,
-        10,
-        10 * PI / 180,
-        0,
-        1,
-        1.1,
-        "Bounded 0-10\nNo detents",
-        0,
-        {},
-        0,
-        0,
-    },
-    {
-        0,
-        0,
-        2,
-        0,
-        72,
-        10 * PI / 180,
-        0,
-        1,
-        1.1,
-        "Multi-rev\nNo detents",
-        0,
-        {},
-        0,
-        73,
-    },
-    {
-        0,
-        0,
-        3,
-        0,
-        1,
-        60 * PI / 180,
-        1,
-        1,
-        0.55, // Note the snap point is slightly past the midpoint (0.5); compare to normal detents which use a snap point *past* the next value (i.e. > 1)
-        "On/off\nStrong detent",
-        0,
-        {},
-        0,
-        157,
-    },
-    {
-        0,
-        0,
-        4,
-        0,
-        0,
-        60 * PI / 180,
-        0.01,
-        0.6,
-        1.1,
-        "Return-to-center",
-        0,
-        {},
-        0,
-        45,
-    },
-    {
-        127,
-        0,
-        5,
-        0,
-        255,
-        1 * PI / 180,
-        0,
-        1,
-        1.1,
-        "Fine values\nNo detents",
-        0,
-        {},
-        0,
-        219,
-    },
+    // {
+    //     0,
+    //     0,
+    //     0,
+    //     0,
+    //     -1, // max position < min position indicates no bounds
+    //     10 * PI / 180,
+    //     0,
+    //     1,
+    //     1.1,
+    //     "Unbounded\nNo detents",
+    //     0,
+    //     {},
+    //     0,
+    //     200,
+    // },
+    // {
+    //     0,
+    //     0,
+    //     1,
+    //     0,
+    //     10,
+    //     10 * PI / 180,
+    //     0,
+    //     1,
+    //     1.1,
+    //     "Bounded 0-10\nNo detents",
+    //     0,
+    //     {},
+    //     0,
+    //     0,
+    // },
+    // {
+    //     0,
+    //     0,
+    //     2,
+    //     0,
+    //     72,
+    //     10 * PI / 180,
+    //     0,
+    //     1,
+    //     1.1,
+    //     "Multi-rev\nNo detents",
+    //     0,
+    //     {},
+    //     0,
+    //     73,
+    // },
+    // {
+    //     0,
+    //     0,
+    //     3,
+    //     0,
+    //     1,
+    //     60 * PI / 180,
+    //     1,
+    //     1,
+    //     0.55, // Note the snap point is slightly past the midpoint (0.5); compare to normal detents which use a snap point *past* the next value (i.e. > 1)
+    //     "On/off\nStrong detent",
+    //     0,
+    //     {},
+    //     0,
+    //     157,
+    // },
+    // {
+    //     0,
+    //     0,
+    //     4,
+    //     0,
+    //     0,
+    //     60 * PI / 180,
+    //     0.01,
+    //     0.6,
+    //     1.1,
+    //     "Return-to-center",
+    //     0,
+    //     {},
+    //     0,
+    //     45,
+    // },
+    // {
+    //     127,
+    //     0,
+    //     5,
+    //     0,
+    //     255,
+    //     1 * PI / 180,
+    //     0,
+    //     1,
+    //     1.1,
+    //     "Fine values\nNo detents",
+    //     0,
+    //     {},
+    //     0,
+    //     219,
+    // },
     {
         127,
         0,
@@ -262,7 +262,7 @@ void InterfaceTask::run() {
         Wire.setClock(400000);
     #endif
     #if SK_STRAIN
-        scale.begin(38, 2);
+        scale.begin(STRAIN_DO, STRAIN_SCK);
     #endif
 
     #if SK_ALS
@@ -281,6 +281,7 @@ void InterfaceTask::run() {
         changeConfig(true);
     }, [this] () {
         if (!configuration_loaded_) {
+            log("Configuration not loaded");
             return;
         }
         if (strain_calibration_step_ == 0) {
@@ -448,7 +449,7 @@ void InterfaceTask::updateHardware() {
         }
     #endif
 
-    uint16_t brightness = UINT16_MAX;
+    uint16_t brightness = UINT8_MAX;
     // TODO: brightness scale factor should be configurable (depends on reflectivity of surface)
     #if SK_ALS
         brightness = (uint16_t)CLAMP(lux_avg * 13000, (float)1280, (float)UINT16_MAX);
